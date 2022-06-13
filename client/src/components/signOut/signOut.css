@@ -1,0 +1,42 @@
+#sign-out {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    cursor: pointer;
+}
+.change__user {
+    position: absolute;
+    right: 6rem;
+    top: 1rem;
+    cursor: pointer;
+}
+.modal__bg{
+    background-color: rgba(0,0,0,0.8);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    min-height: 100vh;
+}
+.modal__form{
+    display: flex;
+    justify-content: center;
+    max-width: 800px;
+    margin: 80px auto 0 auto;
+    flex-wrap: wrap;
+    border:1px solid #fff;
+    padding: 40px 0;
+}
+.modal__form .input__userForm{
+    display: block;
+    flex:0 1 60%;
+    padding: 10px;
+    margin: 20px auto;
+}
+.confirmButton{
+    padding: 25px;
+    font-size: 18px;
+    margin: 0 auto;
+    flex:0 1 100%;
+    max-width: 300px;
+}

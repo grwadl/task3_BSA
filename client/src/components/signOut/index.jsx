@@ -1,0 +1,60 @@
+import {unsetLoginSession} from "../../services/authService";
+import React, {useState} from 'react';
+import './signOut.css';
+
+export default function SignOut({isSignedIn, onSignOut}) {
+    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [form, setForm] = useState({
+        email: '',
+        phone: '',
+        lastName: '',
+        firstName: '',
+        password: ''
+    });
+    const onChangeForm = e => setForm({...form, [e.target.name]: e.target.value});
+    const signOut = () => {
+        unsetLoginSession();
+        onSignOut();
+    }
+    const inputs = [{name: 'email'}, {name: 'phone'}, {name: 'password'}, {name: 'firstName'}, {name: 'lastName'}]
+    const openModal = () => {
+        setIsOpenModal(true);
+    }
+    const closeModal = () => {
+        setIsOpenModal(false);
+        setForm({
+            email: '', phone: '', lastName: '', firstName: '', password: ''
+        })
+    }
+    const submitForm = async () => {
+        let dataToUpdate = {};
+        for (let key in form) {
+            if (form[key])
+                dataToUpdate = {...dataToUpdate, [key]: form[key]}
+        }
+        closeModal()
+    }
+    if (isOpenModal) {
+        return (
+            <div className='modal__bg' onClick={closeModal}>
+                <div className='modal__form' onClick={e => e.stopPropagation()}>
+                    {inputs.map(input => <input className='input__userForm' key={input.name} type="text"
+                                                name={input.name} placeholder={`${input.name}...`}
+                                                onChange={onChangeForm}
+                    />)}
+                    <button onClick={submitForm} className='confirmButton'>Confirm</button>
+                </div>
+            </div>
+        )
+    }
+    if (isSignedIn) {
+        return (
+            <div>
+                <div onClick={openModal} className='change__user'>Change user</div>
+                <div onClick={signOut} id="sign-out">Sign out</div>
+            </div>
+        )
+    }
+
+    return null;
+}
