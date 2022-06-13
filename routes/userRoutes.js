@@ -2,7 +2,6 @@ const {Router} = require('express');
 const UserService = require('../services/userService');
 const {createUserValid, updateUserValid, getUsersValid, getUserValid} = require('../middlewares/user.validation.middleware');
 const {responseMiddleware, responseErrorMiddleware} = require('../middlewares/response.middleware');
-const {UserRepository} = require("../repositories/userRepository");
 
 const router = Router();
 
@@ -21,8 +20,8 @@ router.post('/', createUserValid, (req, res, next) => {
 router.put('/:id', updateUserValid, (req, res, next) => {
     try {
         const id = req.params.id;
-        UserService.changeInfo(id, req.body);
-        res.dataToSend='sucessfully updated';
+        const updatedUser = UserService.changeInfo(id, req.body);
+        res.dataToSend=updatedUser;
     } catch (err) {
         res.err = err;
     } finally {
@@ -31,7 +30,7 @@ router.put('/:id', updateUserValid, (req, res, next) => {
 }, responseMiddleware,responseErrorMiddleware)
 router.get('/', getUsersValid, (req, res, next) => {
     try {
-        const users = UserRepository.getAll();
+        const users =UserService.readAll();
         res.dataToSend=JSON.stringify(users);
     } catch (err) {
         res.err = err;
@@ -42,8 +41,7 @@ router.get('/', getUsersValid, (req, res, next) => {
 router.get('/:id', getUserValid, (req, res, next) => {
     try {
         const id = req.params.id;
-        const users = UserRepository.getAll();
-        const user = users.find(user=>user.id===id)
+        const user = UserService.readOne(id);
         res.dataToSend=JSON.stringify(user);
     } catch (err) {
         res.err = err;
@@ -54,7 +52,7 @@ router.get('/:id', getUserValid, (req, res, next) => {
 router.delete('/:id', getUserValid, (req, res, next) => {
     try {
         const id = req.params.id;
-        UserRepository.delete(id);
+        UserService.deleteUser(id);
         res.dataToSend = 'user was succesfully deleted';
     } catch (err) {
         res.err = err;

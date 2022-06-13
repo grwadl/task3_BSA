@@ -1,7 +1,7 @@
 const { FighterRepository } = require('../repositories/fighterRepository');
 
 class FighterService {
-    search(fighter) {
+    checkForValid(fighter) {
         const fighters = FighterRepository.getAll();
         const isUsed = fighters.find(item=>item.name===fighter.name);
         if(isUsed){
@@ -12,6 +12,22 @@ class FighterService {
     getAllFighters() {
         const fighters = FighterRepository.getAll();
         return fighters;
+    }
+    getFighterById(id){
+        const fighters = FighterRepository.getAll();
+        const searchedFighter = fighters.find(fighter=>fighter.id===id);
+        return searchedFighter;
+    }
+    updateFighter(id,body){
+        FighterRepository.update(id,body);
+        return FighterRepository.getAll().find(item=>item.id===id)
+    }
+    deleteFighter(id){
+        FighterRepository.delete(id);
+    }
+    createFighter(fighter){
+        FighterRepository.create(fighter);
+        return FighterRepository.getOne(fighter);
     }
 }
 

@@ -2,7 +2,6 @@ const { Router } = require('express');
 const FighterService = require('../services/fighterService');
 const { responseMiddleware, responseErrorMiddleware} = require('../middlewares/response.middleware');
 const { createFighterValid, updateFighterValid, getFighterById} = require('../middlewares/fighter.validation.middleware');
-const {FighterRepository} = require("../repositories/fighterRepository");
 
 
 const router = Router();
@@ -10,11 +9,10 @@ const router = Router();
 router.post('/', createFighterValid,(req,res,next)=> {
     try {
         const fighter = req.body;
-        const isUsed = FighterService.search(fighter);
+        const isUsed = FighterService.checkForValid(fighter);
         if(isUsed)
-            return next(new Error('sucn fighter entity is already exists'));
-        FighterRepository.create(fighter);
-        return res.dataToSend=fighter;
+            return next(new Error('such fighter entity is already exists'));
+        return res.dataToSend=FighterService.createFighter(fighter);
 
     } catch (err) {
         res.err = err;
@@ -35,9 +33,7 @@ router.get('/',(req,res,next)=> {
 router.get('/:id', getFighterById,(req,res,next)=> {
     try {
         const id = req.params.id;
-        const fighters = FighterRepository.getAll();
-        const searchedFighter = fighters.find(fighter=>fighter.id===id);
-        return res.dataToSend=searchedFighter;
+        return res.dataToSend=FighterService.getFighterById(id);
     } catch (err) {
         res.err = err;
     } finally {
@@ -49,8 +45,8 @@ router.put('/:id', updateFighterValid,(req,res,next)=> {
         const id = req.params.id;
         if(!req.body)
             return next(new Error('data is empty'));
-        FighterRepository.update(id,req.body);
-        return res.dataToSend='succesfully updated fighter';
+        const updatedFighter = FighterService.updateFighter(id,req.body)
+        return res.dataToSend=updatedFighter;
     } catch (err) {
         res.err = err;
     } finally {
@@ -60,7 +56,7 @@ router.put('/:id', updateFighterValid,(req,res,next)=> {
 router.delete('/:id', getFighterById,(req,res,next)=> {
     try {
         const id = req.params.id;
-        FighterRepository.delete(id);
+        FighterService.deleteFighter(id);
         return res.dataToSend='succesfully deleted fighter';
     } catch (err) {
         res.err = err;
@@ -68,6 +64,4 @@ router.delete('/:id', getFighterById,(req,res,next)=> {
         next()
     }
 },responseMiddleware,responseErrorMiddleware)
-module.exports = router;
-
 module.exports = router;

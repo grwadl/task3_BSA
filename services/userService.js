@@ -15,7 +15,8 @@ class UserService {
             return null;
     }
     changeInfo(id,user){
-        UserRepository.update(id,user)
+        UserRepository.update(id,user);
+        return UserRepository.getAll().find(item=>item.id===id)
     }
 
     search(search) {
@@ -24,6 +25,17 @@ class UserService {
             return null;
         }
         return item;
+    }
+    readAll(){
+        return UserRepository.getAll();
+    }
+    readOne(id){
+        const users = UserRepository.getAll();
+        const user = users.find(user=>user.id===id)
+        return user;
+    }
+    deleteUser(id){
+        UserRepository.delete(id);
     }
 }
 
