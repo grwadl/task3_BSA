@@ -14,48 +14,59 @@ const validateExtraData = (keys) => {
 
 const validateUser = (user) => {
     const {firstName, lastName, email, phoneNumber, password} = user;
-    if (!firstName && lastName && email && phoneNumber && password)
-        return {status: 400, message: 'Invalid type of data'}
+    if (!firstName || !lastName || !email || !phoneNumber || !password)
+        return true;
     if (phoneNumber.split('0')[0] !== '+38' || phoneNumber.split('').length !== 13)
-        return {status: 400, message: 'Invalid phone number'}
+        return true;
     if (email.split('@')[1] !== 'gmail.com')
-        return {status: 400, message: 'Invalid email'}
+        return true;
     if (password.split('').length < 3)
-        return {status: 400, message: 'Invalid password'}
+        return true;
 }
 
 const createUserValid = (req, res, next) => {
     const isNotValid = validateUser(req.body);
+    const {id} = req.body;
+    if(id)
+        return next(new Error('User entity to create isn\'t valid'));
     const extraKeys = validateExtraData(req.body);
-    if (isNotValid || extraKeys)
-        return res.status(isNotValid?.status?isNotValid.status:400)
-            .send(`${isNotValid?.message?isNotValid.message:'to much extra data'}`);
-    else
+    if (isNotValid || extraKeys) {
+        return next(new Error('User entity to create isn\'t valid'));
+    }
         next();
 }
 
 const updateUserValid = (req, res, next) => {
-    const id = req.params.id;
+    const idUser = req.params.id;
     const users = UserRepository.getAll();
-    const isExists = users.find(user => user.id === id);
+    const isExists = users.find(user => user.id === idUser);
     const extraKeys = validateExtraData(req.body);
-    if (!req.body)
-        return res.status(400).send(`unvalid data`);
+    const { email, phoneNumber, password,id} = req.body;
+    if (phoneNumber&&(phoneNumber.split('0')[0] !== '+38' || phoneNumber.split('').length !== 13))
+        return next(new Error('User entity to update isn\'t valid'));
+        else if(id)
+        return next(new Error('User entity to update isn\'t valid'));
+    else if (email&&(email.split('@')[1] !== 'gmail.com'))
+        return next(new Error('User entity to update isn\'t valid'));
+    else if (password&&(password.split('').length < 3))
+        return next(new Error('User entity to update isn\'t valid'));
+   else  if (!req.body|| Object.keys(req.body).length === 0)
+        return next(new Error('User entity to update isn\'t valid'));
     else if (!isExists)
-       return res.status(404).json('this user doesnt exist')
+        return next(new Error('User is not found'));
     else if (extraKeys)
-        return res.status(400).send(`too much data`);
+        return next(new Error('User entity to update isn\'t valid'));
     else
     next();
 }
 const getUsersValid = (req, res, next) => {
     const users = UserRepository.getAll();
-    return users.length > 0 ? next() : res.status(404).json('users is empty');
+    return users.length > 0 ? next() :next(new Error('User is not found'));
 }
 const getUserValid = (req, res, next) => {
     const users = UserRepository.getAll();
     const user = users.find(user => req.params.id === user.id);
-    return user ? next() : res.status(404).json('user isnt found');
+    return user ? next() : next(new Error('User is not found'));
 }
 
 exports.createUserValid = createUserValid;

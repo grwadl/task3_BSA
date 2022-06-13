@@ -1,6 +1,7 @@
 import {unsetLoginSession} from "../../services/authService";
 import React, {useState} from 'react';
 import './signOut.css';
+import { updateUser,deleteUserRequest} from "../../services/domainRequest/userRequest";
 
 export default function SignOut({isSignedIn, onSignOut}) {
     const [isOpenModal, setIsOpenModal] = useState(false);
@@ -32,7 +33,15 @@ export default function SignOut({isSignedIn, onSignOut}) {
             if (form[key])
                 dataToUpdate = {...dataToUpdate, [key]: form[key]}
         }
-        closeModal()
+        closeModal();
+        const id = JSON.parse(localStorage.getItem('user'));
+        await updateUser(dataToUpdate,id);
+        setIsOpenModal(false);
+    }
+    const deleteUser = async() =>{
+        const id = JSON.parse(localStorage.getItem('user'));
+        signOut();
+        await deleteUserRequest(id);
     }
     if (isOpenModal) {
         return (
@@ -43,6 +52,7 @@ export default function SignOut({isSignedIn, onSignOut}) {
                                                 onChange={onChangeForm}
                     />)}
                     <button onClick={submitForm} className='confirmButton'>Confirm</button>
+                    <button onClick={deleteUser} className='deleteutton confirmButton'>Delete User</button>
                 </div>
             </div>
         )

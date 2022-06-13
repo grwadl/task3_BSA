@@ -8,10 +8,11 @@ class UserService {
         const isUsed = users.find(item=>item.phoneNumber===user.phoneNumber||item.email===user.email)
         if(!isUsed) {
             UserRepository.create(user);
-            return false;
+            const userNew = UserRepository.getAll().find(item=>item.phoneNumber===user.phoneNumber)
+            return userNew;
         }
         else
-            return true;
+            return null;
     }
     changeInfo(id,user){
         UserRepository.update(id,user)

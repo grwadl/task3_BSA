@@ -16,27 +16,33 @@ const createFighterValid = (req, res, next) => {
     const {power,defense,name,health} = req.body;
     const isUsed = FighterRepository.getAll().find(fighter=>fighter.name===name);
     if(isUsed)
-        return res.status(400).json('this fighter is already exists')
+        return next(new Error('this fighter entity is already exists'))
     if(health&&!health>120&&!health<80)
-        return res.status(400).json('unvalid data of fighter')
+        return next(new Error('unvalid data of entity fighter'));
     if(!(name&&power>1&&power<100&&defense>1&&defense<10))
-        return res.status(400).json('unvalid data of fighter')
+        return next(new Error('unvalid data of entity fighter'));
     const hasExtraKeys = validateExtraKeys(req.body);
-    hasExtraKeys?res.status(400).json('too many extra data'):next();
+    hasExtraKeys?next(new Error('unvalid data of entity fighter')):next();
 }
 
 const updateFighterValid = (req, res, next) => {
     const id = req.params.id;
     const fighterToUpdate = FighterRepository.getAll().find(fighter=>fighter.id===id);
     if(!fighterToUpdate)
-       return res.status(404).json('such fighter doesnt exist')
+       return next(new Error('such fighter does not exist'));
     const hasExtraKeys = validateExtraKeys(req.body);
-    hasExtraKeys?res.status(400).json('too many extra data'):next();
+    if(req.body.id)
+        return next(new Error('unvalid data of entity fighter'))
+    if(Object.keys(req.body).length===0)
+       return next(new Error('unvalid data of entity fighter'))
+    if(hasExtraKeys)
+        return next(new Error('unvalid data of entity fighter'))
+    next()
 }
 const getFighterById = (req,res,next) =>{
     const fighters = FighterRepository.getAll();
     const isValid = fighters.find(fighter=>fighter.id===req.params.id);
-    return isValid?next(): res.status(404).json('this fighter doesnt exist');
+    return isValid?next(): next(new Error('such fighter does not exist'));
 }
 exports.createFighterValid = createFighterValid;
 exports.updateFighterValid = updateFighterValid;
