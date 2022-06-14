@@ -14,7 +14,7 @@ router.post('/login', (req, res, next) => {
         if(!user.password===isValid.password&&!user.email===isValid.email){
             return next(new Error('Wrong password to login user entity'))
         }
-        res.dataToSend = `${JSON.stringify(isValid.id)}`;
+        res.dataToSend = isValid;
     } catch (err) {
         res.err = err;
     } finally {

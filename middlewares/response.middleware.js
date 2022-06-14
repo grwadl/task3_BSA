@@ -1,4 +1,5 @@
 const responseMiddleware = (req, res, next) => {
+    res._events.data
     res.status(200).json(res.dataToSend)
     return next();
 }

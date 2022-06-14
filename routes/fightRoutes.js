@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const FightService = require('../services/fightService');
-const { responseMiddleware } = require('../middlewares/response.middleware');
+const { responseMiddleware, responseErrorMiddleware} = require('../middlewares/response.middleware');
 
 
 const router = Router();
@@ -28,5 +28,15 @@ router.put('/:id',(req,res,next)=> {
         next()
     }
 },responseMiddleware)
+router.get('/',(req,res,next)=> {
+    try {
+        const fights =  FightService.getAllFights();
+        return res.status(200).json(fights);
+    } catch (err) {
+        res.err = err;
+    } finally {
+        next()
+    }
+},responseMiddleware,responseErrorMiddleware)
 
 module.exports = router;

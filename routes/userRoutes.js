@@ -5,11 +5,11 @@ const {responseMiddleware, responseErrorMiddleware} = require('../middlewares/re
 
 const router = Router();
 
-router.post('/', createUserValid, (req, res, next) => {
+router.post('', createUserValid, (req, res, next) => {
     try {
         const user = req.body;
         const isUsed = UserService.signUp(user);
-        !isUsed ? next(new Error('this user entity is already exists')) : res.dataToSend=JSON.stringify(isUsed.id);
+        !isUsed ? next(new Error('this user entity is already exists')) : res.dataToSend=isUsed;
         next()
     } catch (err) {
         res.err = err;
@@ -28,7 +28,7 @@ router.put('/:id', updateUserValid, (req, res, next) => {
         next()
     }
 }, responseMiddleware,responseErrorMiddleware)
-router.get('/', getUsersValid, (req, res, next) => {
+router.get('', getUsersValid, (req, res, next) => {
     try {
         const users =UserService.readAll();
         res.dataToSend=JSON.stringify(users);

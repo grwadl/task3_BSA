@@ -12,6 +12,9 @@ class FightersService {
         oldFight.log = oldLog
         FightRepository.update(id,oldFight)
     }
+    getAllFights(){
+        return FightRepository.getAll();
+    }
 }
 
 module.exports = new FightersService();

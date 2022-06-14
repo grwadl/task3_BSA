@@ -6,7 +6,7 @@ export const isSignedIn = () => {
 };
 
 export const setLoginSession = (user) => {
-    setLocalStorageItem('user', user);
+    setLocalStorageItem('user', JSON.stringify(user.id));
 }
 
 export const unsetLoginSession = () => {

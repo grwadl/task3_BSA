@@ -6,13 +6,15 @@ import Fighter from '../fighter';
 import { Button } from '@material-ui/core';
 import './fight.css'
 import FightArena from "../FightArena/FightArena";
+import HistoryModal from "../HistoryModal/HistoryModal";
 
 class Fight extends React.Component {
     state = {
         fighters: [],
         fighter1: null,
         fighter2: null,
-        fightStarted:false
+        fightStarted:false,
+        openHistoryModal:false
     };
 
     async componentDidMount() {
@@ -20,6 +22,12 @@ class Fight extends React.Component {
         if(fighters && !fighters.error) {
             this.setState({ fighters });
         }
+    }
+    openModal = () =>{
+        this.setState({openHistoryModal:true})
+    }
+    closeModal = () =>{
+        this.setState({openHistoryModal:false})
     }
 
     onFightStart = () => {
@@ -65,6 +73,9 @@ class Fight extends React.Component {
                 <FightArena onFightEnd={this.onFightEnd} fighters={[this.state.fighter1,this.state.fighter2]}/>
             )
         }
+        if(this.state.openHistoryModal){
+            return <HistoryModal closeModal={this.closeModal}/>
+        }
         return (
             <div id="wrapper">
                 <NewFighter onCreated={this.onCreate} />
@@ -72,6 +83,7 @@ class Fight extends React.Component {
                     <Fighter selectedFighter={fighter1} onFighterSelect={this.onFighter1Select} fightersList={this.getFighter1List() || []} />
                     <div className="btn-wrapper">
                         <Button onClick={this.onFightStart} variant="contained" color="primary">Start Fight</Button>
+                        <Button onClick={this.openModal} variant="contained" color="primary">Watch history Fights</Button>
                     </div>
                     <Fighter selectedFighter={fighter2} onFighterSelect={this.onFighter2Select} fightersList={this.getFighter2List() || []} />
                 </div>

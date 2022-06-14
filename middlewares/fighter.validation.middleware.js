@@ -17,9 +17,9 @@ const createFighterValid = (req, res, next) => {
     const isUsed = FighterRepository.getAll().find(fighter=>fighter.name===name);
     if(isUsed)
         return next(new Error('this fighter entity is already exists'))
-    if(health&&!health>120&&!health<80)
+    if(health&&!health>=120&&!health<=80)
         return next(new Error('unvalid data of entity fighter'));
-    if(!(name&&power>1&&power<100&&defense>1&&defense<10))
+    if(!(name&&power>=1&&power<=100&&defense>=1&&defense<=10))
         return next(new Error('unvalid data of entity fighter'));
     const hasExtraKeys = validateExtraKeys(req.body);
     hasExtraKeys?next(new Error('unvalid data of entity fighter')):next();

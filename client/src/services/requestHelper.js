@@ -4,6 +4,7 @@ export const get = async (entityName, id = '') => {
     return await makeRequest(`${entityName}/${id}`, 'GET');
 }
 
+
 export const post = async (entityName, body) => {
     return await makeRequest(entityName, 'POST', body);
 }
