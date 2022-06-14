@@ -18,10 +18,10 @@ const FightArena = ({fighters,onFightEnd}) => {
         <div className='arena__wrapper'>
             <div className='indicators'>
                 <div className='indicatorLeft'>
-                    <div className='indicator'>{fighters[0].name}</div>
+                    <div className='indicator'><span className='fighter__name'>{fighters[0].name}</span></div>
                 </div>
                 <div className='indicatorRight'>
-                    <div className='indicator'>{fighters[1].name}</div>
+                    <div className='indicator'><span className='fighter__name'>{fighters[1].name}</span></div>
                 </div>
             </div>
             <div className='arena__fighter fighter1'>

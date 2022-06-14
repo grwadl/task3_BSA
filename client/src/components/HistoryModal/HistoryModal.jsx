@@ -4,8 +4,12 @@ import {getFights} from "../../services/domainRequest/fightRequest";
 
 const HistoryModal = ({closeModal}) => {
     const [fights, setFights] = useState([]);
+    const getHistory = async() =>{
+    const data = await getFights();
+    return data&&!data.error? setFights(data):setFights(null)
+    }
     useEffect(() => {
-        getFights().then(res => setFights(res))
+        getHistory()
     }, []);
     return (
         <div className='historyModal__form' >

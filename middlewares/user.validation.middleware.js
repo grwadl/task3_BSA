@@ -14,7 +14,9 @@ const validateExtraData = (keys) => {
 
 const validateUser = (user) => {
     const {firstName, lastName, email, phoneNumber, password} = user;
-    if (!firstName || !lastName || !email || !phoneNumber || !password)
+    const suggestedEmail = UserRepository.getAll().filter(item => item.email === email);
+    const suggestedPhone = UserRepository.getAll().filter(item => item.phoneNumber === phoneNumber);
+    if (!firstName || !lastName || !email || !phoneNumber || !password||!!suggestedEmail.length||!!suggestedPhone.length)
         return true;
     if (phoneNumber.split('0')[0] !== '+38' || phoneNumber.split('').length !== 13)
         return true;
@@ -42,11 +44,13 @@ const updateUserValid = (req, res, next) => {
     const isExists = users.find(user => user.id === idUser);
     const extraKeys = validateExtraData(req.body);
     const { email, phoneNumber, password,id} = req.body;
-    if (phoneNumber&&(phoneNumber.split('0')[0] !== '+38' || phoneNumber.split('').length !== 13))
+    const suggestedEmail = UserRepository.getAll().filter(item => item.email === email);
+    const suggestedPhone = UserRepository.getAll().filter(item => item.phoneNumber === phoneNumber);
+    if (phoneNumber&&(phoneNumber.split('0')[0] !== '+38' || phoneNumber.split('').length !== 13)||(suggestedPhone.length===1&&!(UserRepository.getAll().find(item=>item.phoneNumber===phoneNumber).id===idUser)))
         return next(new Error('User entity to update isn\'t valid'));
-        else if(id)
+    else if(id)
         return next(new Error('User entity to update isn\'t valid'));
-    else if (email&&(email.split('@')[1] !== 'gmail.com'))
+    else if (email&&(email.split('@')[1] !== 'gmail.com')||(suggestedEmail.length===1&&!(UserRepository.getAll().find(item=>item.email===email).id===idUser)))
         return next(new Error('User entity to update isn\'t valid'));
     else if (password&&(password.split('').length < 3))
         return next(new Error('User entity to update isn\'t valid'));

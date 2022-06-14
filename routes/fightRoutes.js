@@ -31,7 +31,7 @@ router.put('/:id',(req,res,next)=> {
 router.get('/',(req,res,next)=> {
     try {
         const fights =  FightService.getAllFights();
-        return res.dataToSend = fights;
+        return !!fights.length?res.dataToSend = fights: next(new Error('no fights')) ;
     } catch (err) {
         res.err = err;
     } finally {

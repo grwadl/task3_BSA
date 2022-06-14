@@ -7,6 +7,7 @@ import { Button } from '@material-ui/core';
 import './fight.css'
 import FightArena from "../FightArena/FightArena";
 import HistoryModal from "../HistoryModal/HistoryModal";
+import FighterModal from "../FighterModal/FighterModal";
 
 class Fight extends React.Component {
     state = {
@@ -14,7 +15,8 @@ class Fight extends React.Component {
         fighter1: null,
         fighter2: null,
         fightStarted:false,
-        openHistoryModal:false
+        openHistoryModal:false,
+        openFighterModal:false
     };
 
     async componentDidMount() {
@@ -29,9 +31,15 @@ class Fight extends React.Component {
     closeModal = () =>{
         this.setState({openHistoryModal:false})
     }
-
+    openFighterModal = ()=>{
+        this.setState({openFighterModal:true})
+    }
+    closeFighterModal = ()=>{
+        this.setState({openFighterModal:false})
+    }
     onFightStart = () => {
-        this.setState({fightStarted:true})
+        if (this.state.fighter1&&this.state.fighter2)
+         this.setState({fightStarted:true})
     }
     onFightEnd = ()=>{
         this.setState({fightStarted:false})
@@ -56,6 +64,9 @@ class Fight extends React.Component {
 
         return fighters.filter(it => it.id !== fighter2.id);
     }
+    changeFighters = (items)=>{
+        return this.setState({fighters:items})
+    }
 
     getFighter2List = () => {
         const { fighter1, fighters } = this.state;
@@ -76,6 +87,9 @@ class Fight extends React.Component {
         if(this.state.openHistoryModal){
             return <HistoryModal closeModal={this.closeModal}/>
         }
+        if(this.state.openFighterModal){
+            return <FighterModal changeFighters={this.changeFighters} fighters={this.state.fighters} closeModal={this.closeFighterModal}/>
+        }
         return (
             <div id="wrapper">
                 <NewFighter onCreated={this.onCreate} />
@@ -84,6 +98,7 @@ class Fight extends React.Component {
                     <div className="btn-wrapper">
                         <Button onClick={this.onFightStart} variant="contained" color="primary">Start Fight</Button>
                         <Button onClick={this.openModal} variant="contained" color="primary">Watch history Fights</Button>
+                        <Button onClick={this.openFighterModal} variant="contained" color="primary">Change fighters</Button>
                     </div>
                     <Fighter selectedFighter={fighter2} onFighterSelect={this.onFighter2Select} fightersList={this.getFighter2List() || []} />
                 </div>

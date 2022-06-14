@@ -31,6 +31,12 @@
     font-size: 18px;
     background-color: green;
     border-radius: 16px;
+    position: relative;
+}
+.fighter__name{
+    position: absolute;
+    top: 0;
+    left: 30px;
 }
 .indicatorLeft{
     width: 600px;

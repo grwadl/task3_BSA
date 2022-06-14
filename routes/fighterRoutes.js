@@ -23,7 +23,7 @@ router.post('/', createFighterValid,(req,res,next)=> {
 router.get('/',(req,res,next)=> {
     try {
         const fighters = FighterService.getAllFighters();
-         !fighters?next(new Error('no fighters :(')):res.dataToSend=fighters;
+         !fighters.length?next(new Error('no fighters :(')):res.dataToSend=fighters;
     } catch (err) {
         res.err = err;
     } finally {

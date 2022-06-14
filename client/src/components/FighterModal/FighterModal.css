@@ -1,0 +1,54 @@
+.fighterModal{
+    max-width: 800px;
+    height: 80%;
+    margin: 80px auto 0 auto;
+    padding: 20px;
+    position: relative;
+    overflow-y: scroll;
+    border:2px solid black;
+}
+.fighterModal__closeBtn{
+    position: absolute;
+    right: 20px;
+    width: 20px;
+    height: 20px;
+    top: 20px;
+    cursor: pointer;
+}
+.fighterModal__closeBtn:after,.fighterModal__closeBtn:before{
+    position: absolute;
+    content: '';
+    background-color: black;
+    right: 10px;
+    width: 3px;
+    height: 19px;
+}
+.fighterModal__closeBtn:after{
+    transform:rotate(45deg);
+}
+.fighterModal__closeBtn:before{
+    transform:rotate(-45deg);
+}
+.fighterModal select{
+    padding: 7px;
+    font-size: 18px;
+}
+.fighterModal__fields{
+    display: flex;
+    flex-wrap: wrap;
+}
+.fighterModal__field{
+    padding: 10px;
+    flex:0 1 100%;
+    margin: 20px 40px;
+    font-size: 18px;
+}
+button:disabled{
+    cursor: not-allowed;
+}
+.fighterModal__button{
+    padding: 20px;
+    font-size: 18px;
+    margin: 0 20px;
+    cursor: pointer;
+}

@@ -17,14 +17,14 @@ export default function SignOut({isSignedIn, onSignOut}) {
         unsetLoginSession();
         onSignOut();
     }
-    const inputs = [{name: 'email'}, {name: 'phone'}, {name: 'password'}, {name: 'firstName'}, {name: 'lastName'}]
+    const inputs = [{name: 'email'}, {name: 'phoneNumber'}, {name: 'password'}, {name: 'firstName'}, {name: 'lastName'}]
     const openModal = () => {
         setIsOpenModal(true);
     }
     const closeModal = () => {
         setIsOpenModal(false);
         setForm({
-            email: '', phone: '', lastName: '', firstName: '', password: ''
+            email: '', phoneNumber: '', lastName: '', firstName: '', password: ''
         })
     }
     const submitForm = async () => {
