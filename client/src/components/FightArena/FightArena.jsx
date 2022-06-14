@@ -3,7 +3,7 @@ import './fightArena.css';
 import luffy from './luffy.gif';
 import lo from './lo.gif';
 import {fight} from "./fight";
-import {createFight, logFight} from "../../services/domainRequest/fightRequest";
+import {createFight} from "../../services/domainRequest/fightRequest";
 const FightArena = ({fighters,onFightEnd}) => {
     useEffect(()=>{
         let fightId;

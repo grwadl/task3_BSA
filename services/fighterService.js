@@ -26,6 +26,7 @@ class FighterService {
         FighterRepository.delete(id);
     }
     createFighter(fighter){
+         fighter.health = fighter.health ?? 100;
         FighterRepository.create(fighter);
         return FighterRepository.getOne(fighter);
     }

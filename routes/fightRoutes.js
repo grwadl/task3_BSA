@@ -21,7 +21,7 @@ router.put('/:id',(req,res,next)=> {
     try {
         const id = req.params.id;
         FightService.logFight(id,req.body);
-        return res.status(200).json('ok');
+        return res.dataToSend = 'ok';
     } catch (err) {
         res.err = err;
     } finally {
@@ -31,7 +31,7 @@ router.put('/:id',(req,res,next)=> {
 router.get('/',(req,res,next)=> {
     try {
         const fights =  FightService.getAllFights();
-        return res.status(200).json(fights);
+        return res.dataToSend = fights;
     } catch (err) {
         res.err = err;
     } finally {

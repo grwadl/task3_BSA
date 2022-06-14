@@ -5,7 +5,7 @@ const {responseMiddleware, responseErrorMiddleware} = require('../middlewares/re
 
 const router = Router();
 
-router.post('', createUserValid, (req, res, next) => {
+router.post('/', createUserValid, (req, res, next) => {
     try {
         const user = req.body;
         const isUsed = UserService.signUp(user);
@@ -31,7 +31,7 @@ router.put('/:id', updateUserValid, (req, res, next) => {
 router.get('', getUsersValid, (req, res, next) => {
     try {
         const users =UserService.readAll();
-        res.dataToSend=JSON.stringify(users);
+        res.dataToSend=users;
     } catch (err) {
         res.err = err;
     } finally {
@@ -42,7 +42,7 @@ router.get('/:id', getUserValid, (req, res, next) => {
     try {
         const id = req.params.id;
         const user = UserService.readOne(id);
-        res.dataToSend=JSON.stringify(user);
+        res.dataToSend=user;
     } catch (err) {
         res.err = err;
     } finally {
